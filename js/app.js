@@ -6,6 +6,17 @@ var Enemy = function() {
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
+    this.x = getX();
+    this.y = getY();
+    this.speed = Math.random() * 250 + 250;
+};
+
+function getX() {
+    return 0 - Math.random() * 500;
+};
+
+function getY() {
+    return 55 + Math.random() * 185;
 };
 
 // Update the enemy's position, required method for game
@@ -14,6 +25,11 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
+    this.x = this.x + dt * this.speed;
+    if (this.x > 505) {
+        this.x = getX();
+        this.y = getY();        
+    }
 };
 
 // Draw the enemy on the screen, required method for game
@@ -42,7 +58,11 @@ Player.prototype.handleInput = function() {
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
-let allEnemies = [];
+let allEnemies = [
+    new Enemy(),
+    new Enemy(),
+    new Enemy()
+];
 // Place the player object in a variable called player
 let player = new Player();
 
