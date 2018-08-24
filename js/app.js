@@ -11,10 +11,20 @@ var Enemy = function() {
     this.speed = Math.random() * 250 + 250;
 };
 
+/*
+ * The starting x coordinate is a random number between 
+ * not greater than 0, this ensures enemies appear from 
+ * the left hand side at different times
+ */
 function getX() {
     return 0 - Math.random() * 500;
 };
 
+/*
+ * The starting y coordinate is a random number, its 
+ * lower and upper bounds are chosen to ensure the enemy
+ * will always run on the canvas' road portion
+ */
 function getY() {
     return 55 + Math.random() * 185;
 };
@@ -26,7 +36,9 @@ Enemy.prototype.update = function(dt) {
     // which will ensure the game runs at the same speed for
     // all computers.
     this.x = this.x + dt * this.speed;
-    if (this.x > 505) {
+    if (this.x > 505) { // when the enemy exits through the right 
+        // hand border of the canvas, we'll give it new x and y 
+        // coordinates to make it reappear from the left hand side
         this.x = getX();
         this.y = getY();        
     }
