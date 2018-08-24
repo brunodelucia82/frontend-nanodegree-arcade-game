@@ -51,7 +51,13 @@ Enemy.prototype.render = function() {
 
 // Now write your own player class
 var Player = function() {
-    
+    this.startX = 202;
+    this.startY = 384.5;
+    this.x = this.startX;
+    this.y = this.startY;
+    this.sprite = 'images/char-boy.png';
+    this.strideX = 101;
+    this.strideY = 81;
 };
 // This class requires an update(), render() and
 Player.prototype.update = function() {
@@ -59,11 +65,31 @@ Player.prototype.update = function() {
 };
 
 Player.prototype.render = function() {
-    
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-Player.prototype.handleInput = function() {
-    
+/*
+ * Handles the keyboard input by changing the player's x and y 
+ * coordinates accordingly. Current position checks make sure
+ * that the player can never wander off the canvas 
+ */
+Player.prototype.handleInput = function(direction) {
+    if (direction === 'left' && this.x > this.startX - 2 * this.strideX ) {
+        this.x -= this.strideX;
+        return;
+    }
+    if (direction === 'right' && this.x < this.startX + 2 * this.strideX ) {
+        this.x += this.strideX;
+        return;
+    }
+    if (direction === 'up' && this.y > this.startY - 5 * this.strideY ) {
+        this.y -= this.strideY;
+        return;
+    }
+    if (direction === 'down' && this.y < this.startY ) {
+        this.y += this.strideY;
+        return;
+    }
 };
 // a handleInput() method.
 
