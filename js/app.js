@@ -1,5 +1,5 @@
 // Enemies our player must avoid
-var Enemy = function() {
+let Enemy = function() {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
 
@@ -87,7 +87,7 @@ Enemy.prototype.collisionWithPlayer = function(plr) {
 }
 
 // Now write your own player class
-var Player = function() {
+let Player = function() {
     this.startX = 202;
     this.startY = 384.5;
     this.x = this.startX;
@@ -194,7 +194,7 @@ let player = new Player();
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
 document.addEventListener('keyup', function(e) {
-    var allowedKeys = {
+    let allowedKeys = {
         37: 'left',
         38: 'up',
         39: 'right',
