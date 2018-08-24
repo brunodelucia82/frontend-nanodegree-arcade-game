@@ -96,6 +96,10 @@ var Player = function() {
     this.strideX = 101;
     this.strideY = 81;
     this.outerRect;
+    this.score = 0; // amount of successful street crossings
+    this.streak = 0; // amount of consecutive street crossings 
+        // since last collision with an enemy
+    this.deaths = 0; // amount of collisions with enemies
 };
 // This class requires an update(), render() and
 Player.prototype.update = function() {
@@ -108,16 +112,43 @@ Player.prototype.update = function() {
         width: 101,
         height: 76
     };
+    // checks whether the player reached the water, in that 
+    // case the player gets back to the starting position 
+    // and the score is incremented by one
+    if (this.checkVictory()) {
+        this.score++;
+        this.streak++;
+        this.x = this.startX;
+        this.y = this.startY;
+    }
     // check for collisions with the enemies, if a collision
     // occurs the player is sent back to the starting position
     for (let i = 0; i < allEnemies.length; i++) {
         let enemy = allEnemies[i];
         if (enemy.collisionWithPlayer(this)) {
+            this.deaths++;
+            this.streak = 0;
             this.x = this.startX;
             this.y = this.startY;
         }
-    }
+    };
+    refreshInfoPanel();
 };
+
+function refreshInfoPanel() {
+    document.getElementById('score').innerText = player.score;
+    document.getElementById('streak').innerText = player.streak;
+    document.getElementById('deaths').innerText = player.deaths;
+}
+
+/*
+ * Returns true when the player has reached the top of the canvas,
+ * otherwise returns false
+ */
+Player.prototype.checkVictory = function() {
+    if (this.y === this.startY - 5 * this.strideY) return true;
+    return false;
+}
 
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
