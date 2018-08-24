@@ -46,10 +46,10 @@ Enemy.prototype.update = function(dt) {
     // update the enemy's outer rectangle
     this.outerRect = {
         topLeft: {
-            x: this.x,
+            x: this.x + 1,
             y: this.y + 78
         },
-        width: 101,
+        width: 100,
         height: 64
     };
 };
@@ -106,10 +106,10 @@ Player.prototype.update = function() {
     // update the player's outer rectangle
     this.outerRect = {
         topLeft: {
-            x: this.x,
+            x: this.x + 18,
             y: this.y + 64
         },
-        width: 101,
+        width: 100,
         height: 76
     };
     // checks whether the player reached the water, in that 
