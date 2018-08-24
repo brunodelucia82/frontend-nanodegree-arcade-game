@@ -9,6 +9,7 @@ var Enemy = function() {
     this.x = getX();
     this.y = getY();
     this.speed = Math.random() * 250 + 250;
+    this.outerRect;
 };
 
 /*
@@ -41,13 +42,49 @@ Enemy.prototype.update = function(dt) {
         // coordinates to make it reappear from the left hand side
         this.x = getX();
         this.y = getY();        
-    }
+    };
+    // update the enemy's outer rectangle
+    this.outerRect = {
+        topLeft: {
+            x: this.x,
+            y: this.y + 78
+        },
+        width: 101,
+        height: 64
+    };
 };
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
+
+/*
+ * Checks whether a collision is occurring between this enemy
+ * and the player, returning either true or false
+ */
+Enemy.prototype.collisionWithPlayer = function(plr) {
+    let thisBottomRight = {
+        x: this.outerRect.topLeft.x + this.outerRect.width,
+        y: this.outerRect.topLeft.y + this.outerRect.height
+    }
+    if (plr.constructor.name === 'Player') { // if plr is actually an instance of Player
+        // and there's vertical overlapping
+        if (plr.outerRect.topLeft.x > this.outerRect.topLeft.x && plr.outerRect.topLeft.x < thisBottomRight.x) {
+            let plrBottomRight = {
+                x: plr.outerRect.topLeft.x + plr.outerRect.width,
+                y: plr.outerRect.topLeft.y + plr.outerRect.height
+            }
+            // and there's horizontal overlapping
+            if ((plr.outerRect.topLeft.y >= this.outerRect.topLeft.y && plr.outerRect.topLeft.y <= thisBottomRight.y) ||
+                (plrBottomRight.y >= this.outerRect.topLeft.y && plrBottomRight.y <= thisBottomRight.y) || 
+                (plr.outerRect.topLeft.y <= this.outerRect.topLeft.y && plrBottomRight.y >= thisBottomRight.y)) {
+                return true; // then we're having a collision
+            }
+        }
+    }
+    return false; // otherwise we're not having any collision
+}
 
 // Now write your own player class
 var Player = function() {
@@ -58,10 +95,28 @@ var Player = function() {
     this.sprite = 'images/char-boy.png';
     this.strideX = 101;
     this.strideY = 81;
+    this.outerRect;
 };
 // This class requires an update(), render() and
 Player.prototype.update = function() {
-    
+    // update the player's outer rectangle
+    this.outerRect = {
+        topLeft: {
+            x: this.x,
+            y: this.y + 64
+        },
+        width: 101,
+        height: 76
+    };
+    // check for collisions with the enemies, if a collision
+    // occurs the player is sent back to the starting position
+    for (let i = 0; i < allEnemies.length; i++) {
+        let enemy = allEnemies[i];
+        if (enemy.collisionWithPlayer(this)) {
+            this.x = this.startX;
+            this.y = this.startY;
+        }
+    }
 };
 
 Player.prototype.render = function() {
