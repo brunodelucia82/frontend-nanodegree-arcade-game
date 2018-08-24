@@ -148,8 +148,7 @@ function refreshInfoPanel() {
  * otherwise returns false
  */
 Player.prototype.checkVictory = function() {
-    if (this.y === this.startY - 5 * this.strideY) return true;
-    return false;
+    return (this.y === this.startY - 5 * this.strideY);
 }
 
 Player.prototype.render = function() {
